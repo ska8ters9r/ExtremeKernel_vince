@@ -861,6 +861,8 @@ static void xfer_work(struct work_struct *work)
 
 	usbhs_pipe_running(pipe, 1);
 	usbhs_pipe_set_trans_count_if_bulk(pipe, pkt->trans);
+	dma_async_issue_pending(chan);
+	usbhsf_dma_start(pipe, fifo);
 	usbhs_pipe_enable(pipe);
 	usbhsf_dma_start(pipe, fifo);
 	dma_async_issue_pending(chan);
@@ -1014,6 +1016,7 @@ static int usbhsf_dma_try_pop(struct usbhs_pkt *pkt, int *is_done)
 
 	pkt->trans = len;
 
+	usbhsf_tx_irq_ctrl(pipe, 0);
 	INIT_WORK(&pkt->work, xfer_work);
 	schedule_work(&pkt->work);
 
