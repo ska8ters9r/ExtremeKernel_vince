@@ -219,6 +219,8 @@ static int f2fs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 		f2fs_sync_fs(sbi->sb, 1);
 
 	f2fs_balance_fs(sbi, true);
+	d_instantiate(dentry, inode);
+	unlock_new_inode(inode);
 	return 0;
 out:
 	handle_failed_inode(inode);
@@ -589,6 +591,8 @@ err_out:
 	kfree(sd);
 
 	f2fs_balance_fs(sbi, true);
+	d_instantiate(dentry, inode);
+	unlock_new_inode(inode);
 	return err;
 out:
 	handle_failed_inode(inode);
@@ -736,6 +740,8 @@ static int __f2fs_tmpfile(struct inode *dir, struct dentry *dentry,
 	unlock_new_inode(inode);
 
 	f2fs_balance_fs(sbi, true);
+	d_instantiate(dentry, inode);
+	unlock_new_inode(inode);
 	return 0;
 
 release_out:

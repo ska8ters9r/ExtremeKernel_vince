@@ -1302,6 +1302,7 @@ int __isolate_lru_page(struct page *page, isolate_mode_t mode)
 			migrate_dirty = mapping && mapping->a_ops->migratepage;
 			unlock_page(page);
 			if (!migrate_dirty)
+			if (mapping && !mapping->a_ops->migratepage)
 				return ret;
 		}
 	}

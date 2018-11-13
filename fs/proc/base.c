@@ -1860,6 +1860,7 @@ static int dname_to_vma_addr(struct dentry *dentry,
 	str += len;
 
 	if (*str != '-')
+	if (sscanf(dentry->d_name.name, "%lx-%lx", start, end) != 2)
 		return -EINVAL;
 	str++;
 
